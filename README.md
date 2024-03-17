@@ -14,18 +14,18 @@ Before running this script, ensure you have the following installed on your syst
 
 To use the script, follow these steps:
 
-1. **Download the Script**: Save the script to a directory of your choice. For the purpose of this documentation, we'll refer to the script as `setupJuceProject.sh`.
+1. **Download the Script**: Save the script to a directory of your choice. For the purpose of this documentation, we'll refer to the script as `setup_juce_project.sh`.
 
 2. **Make the Script Executable**: You might need to grant execution permissions to the script. You can do this by running the following command in your terminal:
    
 ```
-chmod +x setupJuceProject.sh
+chmod +x setup_juce_project.sh
 ```
 
 3. **Run the Script**: Navigate to the directory where the script is saved and execute it by running:
    
 ```
-./setupJuceProject.sh
+./setup_juce_project.sh
 ```
 
 Follow the on-screen prompts to enter your project name and specify the project type (GUI App or Plugin).
