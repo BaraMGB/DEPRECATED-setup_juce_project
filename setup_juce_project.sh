@@ -43,21 +43,33 @@ cd source
 echo "Customizing CMakeLists.txt..."
 
 if [ "$PROJECT_TYPE" == "GUI" ]; then
-    sed -i "s/project(GUI_APP_EXAMPLE VERSION 0.0.1)/project($PROJECT_NAME VERSION 0.0.1)/" CMakeLists.txt
-    sed -i "s/juce_add_gui_app(GuiAppExample/juce_add_gui_app($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/target_compile_definitions(GuiAppExample/target_compile_definitions($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/target_sources(GuiAppExample/target_sources($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/JUCE_APPLICATION_NAME_STRING=\"\$<TARGET_PROPERTY:GuiAppExample/JUCE_APPLICATION_NAME_STRING=\"\$<TARGET_PROPERTY:$PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/JUCE_APPLICATION_VERSION_STRING=\"\$<TARGET_PROPERTY:GuiAppExample/JUCE_APPLICATION_VERSION_STRING=\"\$<TARGET_PROPERTY:$PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/target_link_libraries(GuiAppExample/target_link_libraries($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/PRODUCT_NAME \"Gui App Example\")/PRODUCT_NAME \"$PROJECT_NAME\")/" CMakeLists.txt
+    if [[ "$OSTYPE" == "darwin"* ]]; then  # Prüft, ob das Betriebssystem macOS ist
+        SED_COMMAND="sed -i ''"
+    else
+        SED_COMMAND="sed -i"
+    fi
+
+    $SED_COMMAND "s/project(GUI_APP_EXAMPLE VERSION 0.0.1)/project($PROJECT_NAME VERSION 0.0.1)/" CMakeLists.txt
+    $SED_COMMAND "s/juce_add_gui_app(GuiAppExample/juce_add_gui_app($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/target_compile_definitions(GuiAppExample/target_compile_definitions($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/target_sources(GuiAppExample/target_sources($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/JUCE_APPLICATION_NAME_STRING=\"\$<TARGET_PROPERTY:GuiAppExample/JUCE_APPLICATION_NAME_STRING=\"\$<TARGET_PROPERTY:$PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/JUCE_APPLICATION_VERSION_STRING=\"\$<TARGET_PROPERTY:GuiAppExample/JUCE_APPLICATION_VERSION_STRING=\"\$<TARGET_PROPERTY:$PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/target_link_libraries(GuiAppExample/target_link_libraries($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/PRODUCT_NAME \"Gui App Example\")/PRODUCT_NAME \"$PROJECT_NAME\")/" CMakeLists.txt
 elif [ "$PROJECT_TYPE" == "Plugin" ]; then
-    sed -i "s/juce_add_plugin(AudioPluginExample/juce_add_plugin($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/project(project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)/project($PROJECT_NAME VERSION 0.0.1)/" CMakeLists.txt
-    sed -i "s/target_compile_definitions(AudioPluginExample/target_compile_definitions($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/target_sources(AudioPluginExample/target_sources($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/target_link_libraries(AudioPluginExample/target_link_libraries($PROJECT_NAME/" CMakeLists.txt
-    sed -i "s/PRODUCT_NAME \"Audio Plugin Example\")/PRODUCT_NAME \"$PROJECT_NAME\")/" CMakeLists.txt
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        SED_COMMAND="sed -i ''"
+    else
+        SED_COMMAND="sed -i"
+    fi
+
+    $SED_COMMAND "s/juce_add_plugin(AudioPluginExample/juce_add_plugin($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/project(project(AUDIO_PLUGIN_EXAMPLE VERSION 0.0.1)/project($PROJECT_NAME VERSION 0.0.1)/" CMakeLists.txt
+    $SED_COMMAND "s/target_compile_definitions(AudioPluginExample/target_compile_definitions($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/target_sources(AudioPluginExample/target_sources($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/target_link_libraries(AudioPluginExample/target_link_libraries($PROJECT_NAME/" CMakeLists.txt
+    $SED_COMMAND "s/PRODUCT_NAME \"Audio Plugin Example\")/PRODUCT_NAME \"$PROJECT_NAME\")/" CMakeLists.txt
 fi
 
 cd ..
