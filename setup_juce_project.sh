@@ -13,40 +13,44 @@ if [ -z "$PROJECT_NAME" ]; then
 fi
 
 # Ask for the project type
-echo "Do you want to create a GUI App or a Plugin? [GUI/Plugin]"
-read PROJECT_TYPE
+read -p "Do you want to create a [g]UI App or a [p]lugin? [g/p]: " PROJECT_TYPE_SHORT
 
-if [ "$PROJECT_TYPE" != "GUI" ] && [ "$PROJECT_TYPE" != "Plugin" ]; then
-    echo "Invalid project type. Please specify 'GUI' or 'Plugin'."
+# Convert short project type to full project type
+if [ "$PROJECT_TYPE_SHORT" == "g" ]; then
+    PROJECT_TYPE="GUI"
+elif [ "$PROJECT_TYPE_SHORT" == "p" ]; then
+    PROJECT_TYPE="Plugin"
+else
+    echo "Invalid project type. Please specify 'g' for GUI or 'p' for Plugin."
     exit 1
 fi
 
-# Ask for the directory to create the project in
-read -p "Enter the directory to create the project in (leave empty for current directory): " PROJECT_DIR
-if [ -z "$PROJECT_DIR" ]; then
-    PROJECT_DIR=$(pwd)
-fi
+
+PROJECT_DIR="./Projects"
 
 # Create the project folder
 PROJECT_PATH="$PROJECT_DIR/$PROJECT_NAME"
 echo "Creating project folder at $PROJECT_PATH..."
 mkdir -p "$PROJECT_PATH"
-cd "$PROJECT_PATH"
 
-# Clone JUCE from GitHub
-echo "Cloning JUCE from GitHub..."
-git clone https://github.com/juce-framework/JUCE.git
+# Clone JUCE from GitHub only if it doesn't exist
+if [ ! -d "JUCE" ]; then  
+    echo "Cloning JUCE from GitHub..."
+    git clone https://github.com/juce-framework/JUCE.git
+fi
+
+# Wechsel in den Projektordner, nachdem er erstellt wurde!
+cd "$PROJECT_PATH" 
 
 # Create a Source Directory
 echo "Creating source directory..."
 mkdir source
-
 # Copy the CMake Template based on the project type
 echo "Copying CMake Template..."
 if [ "$PROJECT_TYPE" == "GUI" ]; then
-    cp -r JUCE/examples/CMake/GuiApp/* ./source
+    cp -r ../../JUCE/examples/CMake/GuiApp/* ./source
 elif [ "$PROJECT_TYPE" == "Plugin" ]; then
-    cp -r JUCE/examples/CMake/AudioPlugin/* ./source
+    cp -r ../../JUCE/examples/CMake/AudioPlugin/* ./source
 fi
 
 cd source
@@ -84,10 +88,12 @@ cd ..
 echo "Creating new CMakeLists.txt in project root directory..."
 cat << EOF > CMakeLists.txt
 cmake_minimum_required(VERSION 3.22)
-
+set(JUCE_ROOT "../../JUCE")
 project($PROJECT_NAME VERSION 0.01)
 
-add_subdirectory(JUCE)
+# Create build folder for Juce if not exits
+
+add_subdirectory(\${JUCE_ROOT} ./build)
 add_subdirectory(source)
 EOF
 
@@ -204,3 +210,4 @@ if [ "$PROJECT_TYPE" == "GUI" ]; then
     echo " To start your GUI app, run: ./start.sh [BuildType] (e.g., ./start.sh Release)"
 fi
 echo "------------------------------------------"
+
