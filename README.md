@@ -1,4 +1,8 @@
-# JUCE Project Setup Script
+# Deprecated - Please use [new-repo](https://github.com/BaraMGB/JuMake) instead.
+
+
+
+## JUCE Project Setup Script
 
 This script is designed to automate the creation and setup of new JUCE projects, either GUI applications or plugins. It streamlines the process of preparing the project environment, cloning the JUCE framework, setting up the project structure, and initializing a build system.
 
